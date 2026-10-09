@@ -1,0 +1,21 @@
+name: Lint formulae
+
+on: push
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.7'
+
+      - name: Lint formulae
+        run: make lint
