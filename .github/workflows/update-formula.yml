@@ -1,0 +1,91 @@
+name: Update formula
+
+# Reusable workflow: called from a tool's release workflow to open a PR that
+# bumps its formula to the new release. See README.md ("Automated updates").
+on:
+  workflow_call:
+    inputs:
+      formula:
+        description: Formula name, i.e. Formula/<name>.rb
+        required: true
+        type: string
+      tag:
+        description: Release tag in the calling repo (e.g. v0.1.1)
+        required: true
+        type: string
+      checksums_asset:
+        description: Release asset holding sha256sum-format checksums
+        required: false
+        type: string
+        default: checksums.txt
+    secrets:
+      TAP_APP_ID:
+        required: true
+      TAP_APP_PRIVATE_KEY:
+        required: true
+
+permissions: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App token (scoped to the tap)
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.TAP_APP_ID }}
+          private-key: ${{ secrets.TAP_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: homebrew-tap
+
+      - name: Check out the tap
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/homebrew-tap
+          ref: main
+          token: ${{ steps.app.outputs.token }}
+
+      - name: Download release checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          ASSET: ${{ inputs.checksums_asset }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "$ASSET" --output "$RUNNER_TEMP/checksums.txt"
+
+      - name: Update formula
+        env:
+          FORMULA: ${{ inputs.formula }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          python3 scripts/update_formula.py "Formula/${FORMULA}.rb" "$TAG" "$RUNNER_TEMP/checksums.txt"
+
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          FORMULA: ${{ inputs.formula }}
+          TAG: ${{ inputs.tag }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+          APP_ID: ${{ secrets.TAP_APP_ID }}
+          SOURCE_REPO: ${{ github.repository }}
+        run: |
+          if git diff --quiet; then
+            echo "Formula already up to date; nothing to do."
+            exit 0
+          fi
+          branch="update/${FORMULA}-${TAG}"
+          title="${FORMULA} ${TAG}"
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${APP_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add "Formula/${FORMULA}.rb"
+          git commit -m "Update ${FORMULA} to ${TAG}"
+          git push --force origin "$branch"
+          if [ -n "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            echo "PR for $branch already open."
+          else
+            gh pr create --base main --head "$branch" --title "$title" \
+              --body "Automated update of \`${FORMULA}\` to \`${TAG}\` from https://github.com/${SOURCE_REPO}/releases/tag/${TAG}."
+          fi
