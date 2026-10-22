@@ -19,6 +19,7 @@ brew install managedkaos/tap/<tool>
 
 | Tool | Description | Install |
 | ---- | ----------- | ------- |
+| [browsers](https://github.com/managedkaos/browser-tools) | List installed web browsers and browser profiles on macOS | `brew install managedkaos/tap/browsers` |
 | [recall](https://github.com/managedkaos/recall) | Store, retrieve, and search markdown-formatted reference files | `brew install managedkaos/tap/recall` |
 | [rehab](https://github.com/managedkaos/rehab) | Rename files and directories to replace problematic characters, with undo | `brew install managedkaos/tap/rehab` |
 
