@@ -4,8 +4,8 @@ class Browsers < Formula
   # The tap's update workflow rewrites the release tag in `url` and `sha256` on
   # each release (see the tap's scripts/update_formula.py). The asset name has no
   # version in it; Homebrew reads the version from the tag in the URL path.
-  url "https://github.com/managedkaos/browser-tools/releases/download/v0.1.0/browsers-macos-universal.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  url "https://github.com/managedkaos/browser-tools/releases/download/v2026.10.22/browsers-macos-universal.tar.gz"
+  sha256 "2f3a9f327fe6df381d5db51fbe35b4898bcf493f7f4d29f7c62a1aa809d21007"
   license "MIT"
 
   depends_on macos: :sonoma
