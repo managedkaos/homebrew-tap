@@ -1,28 +1,28 @@
 class Rehab < Formula
   desc "Rename files and directories to replace problematic characters, with undo"
   homepage "https://github.com/managedkaos/rehab"
-  version "0.1.0"
+  version "0.2.0"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/managedkaos/rehab/releases/download/v0.1.0/rehab-darwin-arm64.tar.gz"
-      sha256 "4358bb38d7cce0e4a8407e1c2fdf605fcb8c54984c53c110e469be9d52767f67"
+      url "https://github.com/managedkaos/rehab/releases/download/v0.2.0/rehab-darwin-arm64.tar.gz"
+      sha256 "bc61d504e6354d28789b5607fbc71c5fbb66c158e09f7915537a82d0d0aa0b9f"
     end
     on_intel do
-      url "https://github.com/managedkaos/rehab/releases/download/v0.1.0/rehab-darwin-amd64.tar.gz"
-      sha256 "7eece8958151d4e0b92e9c623899e855dca7aa061b224641e0b85459a2c60ca6"
+      url "https://github.com/managedkaos/rehab/releases/download/v0.2.0/rehab-darwin-amd64.tar.gz"
+      sha256 "3eac69edae6296f9f12b5be8a07b84752f63ccce1eb5f8466668d0c069838358"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/managedkaos/rehab/releases/download/v0.1.0/rehab-linux-arm64.tar.gz"
-      sha256 "01b3897fdfe6bb33f6b7222ed3ad31e53f9cd4e180eefc885e5933db6e6950d3"
+      url "https://github.com/managedkaos/rehab/releases/download/v0.2.0/rehab-linux-arm64.tar.gz"
+      sha256 "779c583e021382960e34f1c157f416d8b8bb4c99f525c7335fb28817e66f588a"
     end
     on_intel do
-      url "https://github.com/managedkaos/rehab/releases/download/v0.1.0/rehab-linux-amd64.tar.gz"
-      sha256 "cc841df826d7b932191b1dcd85e377909a43f7acb6612e4d17e78f9ee9bf31b3"
+      url "https://github.com/managedkaos/rehab/releases/download/v0.2.0/rehab-linux-amd64.tar.gz"
+      sha256 "05ab5ea94baa59ac91904797b528b439c79b0311bb9fee15262b4055f358ead0"
     end
   end
 
